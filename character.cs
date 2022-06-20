@@ -148,7 +148,7 @@ namespace text_based_RPG
         }
 
         void calcAndSetStats() {
-            bool bonus = (equip[0].getType() != -1 && equip[0].getType() == equip[1].getType() && equip[0].getType() == equip[2].getType() && equip[0].getType() == equip[3].getType() && equip[0].getType() == equip[4].getType() && equip[0].getType() == equip[5].getType());
+            bool bonus = (pType == equip[0].getType() && pType == equip[1].getType() && pType == equip[2].getType() && pType == equip[3].getType() && pType == equip[4].getType() && pType == equip[5].getType());
             
             int mhp = 10 + (level * 3);
             int atk = equip[0].getAtk() + equip[1].getAtk() + equip[2].getAtk() + equip[3].getAtk() + equip[4].getAtk() + equip[5].getAtk() + (level * 3) + 1;
@@ -158,7 +158,7 @@ namespace text_based_RPG
             
             if (bonus)
             {
-                switch (equip[0].getType()) {
+                switch (pType) {
                     case 0://fighter
                         atk += 5;
                         def += 1;
