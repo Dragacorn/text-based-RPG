@@ -1,0 +1,15 @@
+C:\Users\Adam Morgan\Desktop\text based RPG\bin\Debug\net6.0\text based RPG.exe
+C:\Users\Adam Morgan\Desktop\text based RPG\bin\Debug\net6.0\text based RPG.deps.json
+C:\Users\Adam Morgan\Desktop\text based RPG\bin\Debug\net6.0\text based RPG.runtimeconfig.json
+C:\Users\Adam Morgan\Desktop\text based RPG\bin\Debug\net6.0\text based RPG.dll
+C:\Users\Adam Morgan\Desktop\text based RPG\bin\Debug\net6.0\text based RPG.pdb
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.csproj.AssemblyReference.cache
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.AssemblyInfoInputs.cache
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.AssemblyInfo.cs
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.csproj.CoreCompileInputs.cache
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.dll
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\refint\text based RPG.dll
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.pdb
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\text based RPG.genruntimeconfig.cache
+C:\Users\Adam Morgan\Desktop\text based RPG\obj\Debug\net6.0\ref\text based RPG.dll

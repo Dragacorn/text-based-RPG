@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x9tc2sYX2d2Ty9ImfvYTqhRh1UukBR4LJleCC6cGjm7Zz+x3R0Vuv3+EdunIyf5FboM/fDAgsccILyqS8325VA==",
+  "dgSpecHash": "Xz5K/FziZaa7j5sSJSigCjJU871VvIH8ZnQJ7qLQ2q0V5dbcAuyEqM9LbZ3h2qv4aYDLN81dbmC4IAvp1Si44w==",
   "success": true,
   "projectFilePath": "C:\\Users\\Adam Morgan\\Desktop\\text based RPG\\text based RPG.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\Adam Morgan\\.nuget\\packages\\microsoft.netcore.app.ref\\5.0.0\\microsoft.netcore.app.ref.5.0.0.nupkg.sha512",
-    "C:\\Users\\Adam Morgan\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\5.0.0\\microsoft.windowsdesktop.app.ref.5.0.0.nupkg.sha512",
-    "C:\\Users\\Adam Morgan\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\5.0.0\\microsoft.aspnetcore.app.ref.5.0.0.nupkg.sha512",
-    "C:\\Users\\Adam Morgan\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.17\\microsoft.netcore.app.host.win-x64.5.0.17.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }
