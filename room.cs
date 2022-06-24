@@ -5,7 +5,7 @@ namespace text_based_RPG
     class room 
     {
         public static room EMPTY = new room(new int[] {0, 0, 0, 0}, new enemy[] {enemy.NONE});
-        public static room BOSS = new room(new int[]{0,0,1,0}, new enemy[]{new enemy(5, 50, 5, 7, 45, 10, 1.25f)});
+
         int[] doors;
         enemy[] enemies;
         public room(int[] open, enemy[] en) {

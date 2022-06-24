@@ -29,9 +29,15 @@ namespace text_based_RPG
             string resp = "";
             
             attackStart:
-                Console.WriteLine("Which enemy would you like to target?");
-                if(!int.TryParse(Console.ReadLine(), out curEnemy)) {
-                    goto attackStart;
+                Console.WriteLine("Choose an enemy to target or type h to heal");
+                resp = Console.ReadLine();
+                if(!int.TryParse(resp, out curEnemy)) {
+                    if (resp == "h" || resp == "H")
+                    {
+                        heal();
+                        return;
+                    }
+                    else { goto attackStart; }
                 }
                 if (curEnemy - 1 >= enemies.Length) {
                     goto attackStart;

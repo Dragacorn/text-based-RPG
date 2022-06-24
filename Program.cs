@@ -14,7 +14,7 @@ namespace text_based_RPG
             room[,] level = {
                 {new room(new int[]{0,1,1,0}, new enemy[] {enemy.random(), enemy.random(), enemy.random()}), room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
                 {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
-                {room.EMPTY, room.EMPTY, room.BOSS, room.EMPTY, room.EMPTY},
+                {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
                 {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
                 {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY}
             };
@@ -31,8 +31,9 @@ namespace text_based_RPG
             equipment a = new equipment(2, type.ATK, 2, 2, 0, 0);
 
             character player = new character(type.ATK,0, 0, h, r, l, c, b, a);
+            
             while (play) {
-                
+
                 curRoom.loadRoom(player);
                 player.doTurn(curRoom);
                 enemy.doTurn(curRoom, player);

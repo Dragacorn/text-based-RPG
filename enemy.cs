@@ -115,5 +115,9 @@ namespace text_based_RPG
             }
             return dmg;
         }
+
+        public static enemy operator *(enemy e, int x) {
+            return new enemy(e.level * x, e.hp * x, e.atk * x, e.def * x, e.mag * x, e.spr * x, e.exp * x);
+        } 
     }
 }
