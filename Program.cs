@@ -1,5 +1,5 @@
 ﻿using System;
-
+//https://patorjk.com/software/taag/#p=display&f=Doom&t=OVERKILL
 namespace text_based_RPG
 {
     class Program
@@ -7,9 +7,11 @@ namespace text_based_RPG
         
         static void Main(string[] args)
         {
-            bool play = true;
+            setup();
+        }
+
+        static void setup() {
             Random rand = new Random();
-            
 
             room[,] level = {
                 {new room(new int[]{0,1,1,0}, new enemy[] {enemy.random(), enemy.random(), enemy.random()}), room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
@@ -23,34 +25,48 @@ namespace text_based_RPG
 
             enemy[] enemies = curRoom.GetEnemies();
 
-            equipment h = new equipment(0, type.ATK, 1, 2, 0, 0);
-            equipment r = new equipment(0, type.ATK, 3, 0, 0, 0);
-            equipment l = new equipment(0, type.ATK, 1, 3, 0, 1);
-            equipment c = new equipment(0, type.ATK, 1, 2, 0, 2);
-            equipment b = new equipment(0, type.ATK, 1, 1, 1, 1);
-            equipment a = new equipment(2, type.ATK, 2, 2, 0, 0);
+            equipment h = new equipment(0, type.ATK, 5, 0, 0, 0);
+            equipment r = new equipment(0, type.ATK, 5, 0, 0, 0);
+            equipment l = new equipment(0, type.ATK, 5, 0, 0, 0);
+            equipment c = new equipment(0, type.ATK, 5, 0, 0, 0);
+            equipment b = new equipment(0, type.ATK, 5, 0, 1, 0);
+            equipment a = new equipment(2, type.ATK, 5, 0, 0, 0);
 
             character player = new character(type.ATK,0, 0, h, r, l, c, b, a);
             
-            while (play) {
+            gameLoop(curRoom, player);
+        }
+        static void gameLoop(room curRoom, character player) {
+            curRoom.loadRoom(player);
+            player.doTurn(curRoom);
+            enemy.doTurn(curRoom, player);
 
-                curRoom.loadRoom(player);
-                player.doTurn(curRoom);
-                enemy.doTurn(curRoom, player);
 
-
-                if (player.getStats()[0] <= 0) {
-                    play = false;
-                    goto end;
-                }
-    
+            if (player.getStats()[0] <= 0) {
+                gameEnd();
+            } else {
                 Console.WriteLine("\n\nPress Enter to start next turn.");
                 Console.ReadKey(true);
                 Console.Clear();
+                gameLoop(curRoom, player);
             }
-            end:
-            Console.WriteLine("\n\nPress Enter to Exit Terminal.");
-            Console.ReadKey(true);
+        }
+        static void gameEnd()
+        {
+            Console.WriteLine("\n\nPress Enter to Exit Terminal or type \"r\" to restart.");
+            string exit = Console.ReadLine();
+            switch (exit.ToUpper()) {
+                case "R":
+                    Console.Clear();
+                    setup();
+                    break;
+                case "": 
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input");
+                    gameEnd();
+                    break;
+            }
         }
     }
 }

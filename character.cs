@@ -24,35 +24,51 @@ namespace text_based_RPG
         public void doTurn(room curRoom) {
             attackPhase(curRoom.GetEnemies());
         }
-        void attackPhase(enemy[] enemies) {
-            int curEnemy = 0;
+        int selectEnemy(enemy[] enemies) {
             string resp = "";
+            int curEnemy;
+            Console.WriteLine("Choose an enemy to target or type h to heal");
+            resp = Console.ReadLine();
+            if(!int.TryParse(resp, out curEnemy)) {
+                if (resp == "h" || resp == "H")
+                {
+                    heal();
+                    return -1;
+                }
+                else { 
+                    Console.WriteLine("Invalid Input");
+                    selectEnemy(enemies);
+                }
+            }
+            if (curEnemy - 1 >= enemies.Length || curEnemy <= 0 || enemies[curEnemy - 1].isDead()) {
+                Console.WriteLine("Invalid Input");
+                selectEnemy(enemies);
+            }
+            return curEnemy;
+        }
+        void attackStyle(enemy[] enemies, int curEnemy) {
+            if (curEnemy == -1) {
+                return;
+            }
+            Console.WriteLine("Turn: \nType 1 to use Melee or type 2 to use Magic");
+            string resp = Console.ReadLine();
+            if (resp.Equals("1")) {
+                attack(0, enemies[curEnemy - 1]);
+            } else if (resp.Equals("2")) {
+                attack(1, enemies[curEnemy - 1]);
+            }  else {
+                Console.WriteLine("Invalid Input");
+                attackStyle(enemies, curEnemy);
+            }
+        }
+        void attackPhase(enemy[] enemies) {
             
-            attackStart:
-                Console.WriteLine("Choose an enemy to target or type h to heal");
-                resp = Console.ReadLine();
-                if(!int.TryParse(resp, out curEnemy)) {
-                    if (resp == "h" || resp == "H")
-                    {
-                        heal();
-                        return;
-                    }
-                    else { goto attackStart; }
-                }
-                if (curEnemy - 1 >= enemies.Length) {
-                    goto attackStart;
-                }
+            attackStyle(enemies, selectEnemy(enemies));
+                
+        }
 
-            attackType:
-                Console.WriteLine("Turn: \nType 1 to use Melee or type 2 to use Magic");
-                resp = Console.ReadLine();
-                if (resp.Equals("1")) {
-                    attack(0, enemies[curEnemy - 1]);
-                } else if (resp.Equals("2")) {
-                    attack(1, enemies[curEnemy - 1]);
-                }  else {
-                    goto attackType;
-                }
+        public bool isDead() {
+            return hp <= 0;
         }
 
         public void attack(int moveType, enemy toAttack) {
@@ -73,7 +89,14 @@ namespace text_based_RPG
             Console.WriteLine("\nYou were dealt " + dmg + " damage!");
             if (hp <= 0) {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You DIED...");
+                Console.WriteLine(
+                    "__   _______ _   _  ______ _____ ___________ \n"+
+                    "\\ \\ / /  _  | | | | |  _  \\_   _|  ___|  _  \\\n"+
+                    " \\ V /| | | | | | | | | | | | | | |__ | | | |\n"+
+                    "  \\ / | | | | | | | | | | | | | |  __|| | | |\n"+
+                    "  | | \\ \\_/ / |_| | | |/ / _| |_| |___| |/ / \n"+
+                    "  \\_/  \\___/ \\___/  |___/  \\___/\\____/|___/  \n"
+                );
                 Console.ForegroundColor = ConsoleColor.White;
             } else {
                 Console.WriteLine("You are at " + hp + "/" + mhp + " health");
@@ -90,7 +113,7 @@ namespace text_based_RPG
             if (hp < mhp)
             {
                 int helathNeeded = mhp - hp;
-                int healAmount = (int)Math.Clamp(Math.Round((float)helathNeeded / 2), 1, mhp/8);
+                int healAmount = (int)Math.Clamp(Math.Round((float)helathNeeded / 2), 1, mhp/4);
                 hp += healAmount;
                 Console.WriteLine("Healed " + healAmount + " health");
             } else {
@@ -143,12 +166,25 @@ namespace text_based_RPG
                 j++;
                 hpLeft += " ";
             }
-            Console.WriteLine("\n---YOUR STATS---\nLevel: " + (level + 1) + " | EXP: " + Math.Round(exp * 100) + "/" + ((level + 1) * 100) + " HP: " + hp + "/" + mhp + ", Atk: " + atk + ", Def: " + def + ", Mag: " + mag + ", Spr: " + spr + "\n");
+            //Console.WriteLine("\n---YOUR STATS---\nLevel: " + (level + 1) + " | EXP: " + Math.Round(exp * 100) + "/" + ((level + 1) * 100) + " HP: " + hp + "/" + mhp + ", Atk: " + atk + ", Def: " + def + ", Mag: " + mag + ", Spr: " + spr + "\n");
+            string LVL = (level < 9 ? "00" + (level + 1) : ( level < 99 ? "0" + (level + 1) : (level + 1).ToString() ) );
+            int CEXP = (int)Math.Round((exp * 100) / (level + 1));
+            string EXP = "";
+            j = 0;
+            while (j < (CEXP * 0.25)) {
+                j++;
+                EXP += "~";
+            }
+            while (j < 25) {
+                j++;
+                EXP += " ";
+            }
             Console.WriteLine(
                 "+------------------------------------------------+\n"+//50
                 "| Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
                 "|   HP: [" + hpLeft + "]     |\n"+
                 "| HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                "| LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
                 "+------------------------------------------------+\n"
             );
         }
@@ -161,7 +197,7 @@ namespace text_based_RPG
             int def = equip[0].getDef() + equip[1].getDef() + equip[2].getDef() + equip[3].getDef() + equip[4].getDef() + equip[5].getDef() + (level * 3) + 1;
             int mag = equip[0].getMag() + equip[1].getMag() + equip[2].getMag() + equip[3].getMag() + equip[4].getMag() + equip[5].getMag() + (level * 3) + 1;
             int spr = equip[0].getSpr() + equip[1].getSpr() + equip[2].getSpr() + equip[3].getSpr() + equip[4].getSpr() + equip[5].getSpr() + (level * 3) + 1;
-            
+            Random rand = new Random();
             if (bonus)
             {
                 switch (pType) {
@@ -180,6 +216,12 @@ namespace text_based_RPG
                     case 3://magical tank
                         spr += 5;
                         def += 1;
+                        break;
+                    default:
+                        atk += rand.Next(-1, 2);
+                        def += rand.Next(-1, 2);
+                        mag += rand.Next(-1, 2);
+                        spr += rand.Next(-1, 2);
                         break;
                 }
             }

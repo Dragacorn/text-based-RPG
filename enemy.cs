@@ -40,7 +40,7 @@ namespace text_based_RPG
         }
 
         public void attack(character toAttack) {
-            if (this.Equals(enemy.NONE)) {
+            if (this.Equals(enemy.NONE) || toAttack.isDead()) {
                 return;
             }
             int moveType = mag * 1.5f / toAttack.getStats()[4] > atk * 1.5f / toAttack.getStats()[2] ? 1 : 0;
@@ -55,11 +55,12 @@ namespace text_based_RPG
         public void printStats() {
             if (this.Equals(enemy.NONE)) {
                 Console.WriteLine(
-                "+------------------------------------------------+\n"+//50
-                "| Enemy is defeated                              |\n"+
-                "|   HP: [                                  ]     |\n"+
-                "| HP: 0/0                                        |\n"+
-                "+------------------------------------------------+\n");
+" _____ _   _  ________  ____   __ ______ _____  ___ ______ \n"+
+"|  ___| \\ | ||  ___|  \\/  \\ \\ / / |  _  \\  ___|/ _ \\|  _  \\\n"+
+"| |__ |  \\| || |__ | .  . |\\ V /  | | | | |__ / /_\\ \\ | | |\n"+
+"|  __|| . ` ||  __|| |\\/| | \\ /   | | | |  __||  _  | | | |\n"+
+"| |___| |\\  || |___| |  | | | |   | |/ /| |___| | | | |/ / \n"+
+"\\____/\\_| \\_/\\____/\\_|  |_/ \\_/   |___/ \\____/\\_| |_/___/  \n");
                 return;
             }
             string spaces = "";
@@ -109,6 +110,17 @@ namespace text_based_RPG
             Console.WriteLine("\nEnemy was dealt " + dmg + " damage!");
             if (hp <= 0) {
                 Console.WriteLine("Defeated Enemy!");
+                if (hp < -mhp/2){
+                    exp *= 2;
+                    // Console.WriteLine("☻☻OVERKILL BONUS☻☻");
+                    Console.WriteLine("\n\n"+
+                        " _____  _   _ ___________ _   _______ _      _     \n"+
+                        "|  _  || | | |  ___| ___ \\ | / /_   _| |    | |    \n"+
+                        "| | | || | | | |__ | |_/ / |/ /  | | | |    | |    \n"+
+                        "| | | || | | |  __||    /|    \\  | | | |    | |    \n"+
+                        "\\ \\_/ /\\ \\_/ / |___| |\\ \\| |\\  \\_| |_| |____| |____\n" +
+                        " \\___/  \\___/\\____/\\_| \\_\\_| \\_/\\___/\\_____/\\_____/\n\n");
+                }
                 attacker.gainEXP(exp);
             } else {
                 Console.WriteLine("Enemy is at " + hp + "/" + mhp + " health!");
