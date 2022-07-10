@@ -2,18 +2,19 @@ namespace text_based_RPG
 {
     struct equipment 
     {
-        public static equipment EMPTY = new equipment(0, -1, 0, 0, 0, 0);
+        public static equipment EMPTY = new equipment(0, -1, 0, 0, 0, 0, 0);
 
 
-        int level, type, atk, def, mag, spr;
+        int level, type, atk, def, mag, spr, agl;
 
-        public equipment(int _level, int _type, int _atk, int _def, int _mag, int _spr) {
+        public equipment(int _level, int _type, int _atk, int _def, int _mag, int _spr, int _agl) {
             this.level = _level;
             this.type = _type;
             this.atk = _atk;
             this.def = _def;
             this.mag = _mag;
             this.spr = _spr;
+            this.agl = _agl;
         }
 
         public equipment upgradeEquip() {
@@ -42,6 +43,9 @@ namespace text_based_RPG
         }
         public int getSpr() {
             return spr;
+        }
+        public int getAgl() {
+            return agl;
         }
     }
 }

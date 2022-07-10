@@ -10,6 +10,17 @@ namespace text_based_RPG
             return new enemy(1, rand.Next(10, 25), rand.Next(1, 7), rand.Next(1, 7), rand.Next(1, 7), rand.Next(1, 7), (float)rand.NextDouble() + (1 / 5));
         }
 
+        public static enemy[] randGroup(int size) {
+            if(size == 0) {
+                return new enemy[] {enemy.NONE};
+            }
+            enemy[] ret = new enemy[size];
+            for (int i = 0; i < size; i++) {
+                ret[i] = enemy.random();
+            }
+            return ret;
+        }
+
         int level, hp, mhp, atk, def, mag, spr;
         float exp;
 
@@ -52,7 +63,7 @@ namespace text_based_RPG
             }
         }
 
-        public void printStats() {
+        public void printStats(int pos) {
             if (this.Equals(enemy.NONE)) {
                 Console.WriteLine(
 " _____ _   _  ________  ____   __ ______ _____  ___ ______ \n"+
@@ -89,14 +100,72 @@ namespace text_based_RPG
                 j++;
                 hpLeft += " ";
             }
-            //Console.WriteLine("\n---ENEMY STATS---\nHP: " + hp + "/" + mhp + ", Atk: " + atk + ", Def: " + def + ", Mag: " + mag + ", Spr: " + spr + "\n");
-            Console.WriteLine(
-                "+------------------------------------------------+\n"+//50
-                "| Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
-                "|   HP: [" + hpLeft + "]     |\n"+
-                "| HP: "+ hp + "/" + mhp + spaces + " |\n"+
-                "+------------------------------------------------+\n"
-            );
+            
+            switch (pos) {
+                case 0:
+                    Console.WriteLine(
+                        " __   \n"+
+                        "/  |  +------------------------------------------------+\n"+//50
+                        " | |  | Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
+                        " | |  |   HP: [" + hpLeft + "]     |\n"+
+                        "_| |_ | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "\\___/ +------------------------------------------------+\n"
+                    );
+                    break;
+                case 1:
+                    Console.WriteLine(
+                        " _____  \n"+
+                        "/___  \\ +------------------------------------------------+\n"+//50
+                        "   / /  | Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
+                        "  / /   |   HP: [" + hpLeft + "]     |\n"+
+                        " / /___ | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "\\_____/ +------------------------------------------------+\n"
+                    );
+                    break;
+                case 2:
+                    Console.WriteLine(
+                        " _____  \n"+
+                        "|____ | +------------------------------------------------+\n"+//50
+                        "    / / | Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
+                        "    \\ \\ |   HP: [" + hpLeft + "]     |\n"+
+                        " ___/ / | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "\\____/  +------------------------------------------------+\n"
+                    );
+                    break;
+                case 3:
+                    Console.WriteLine(
+                        "   ___  \n"+
+                        "  /   | +------------------------------------------------+\n"+//50
+                        " / /| | | Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
+                        "/ /_| | |   HP: [" + hpLeft + "]     |\n"+
+                        "\\___  | | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "    |_| +------------------------------------------------+\n"
+                    );
+                    break;
+                case 4:
+                    Console.WriteLine(
+                        " _____  \n"+
+                        "|  ___| +------------------------------------------------+\n"+//50
+                        "|___ \\  | Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
+                        "    \\ \\ |   HP: [" + hpLeft + "]     |\n"+
+                        "/\\__/ / | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "\\____/  +------------------------------------------------+\n"
+                    );
+                    break;
+                default:
+                    Console.WriteLine(
+                        "\n"+
+                        "+------------------------------------------------+\n"+//50
+                        "| Enemy | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + "  |\n"+
+                        "|   HP: [" + hpLeft + "]     |\n"+
+                        "| HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "+------------------------------------------------+\n"
+                    );
+                    break;
+            }
+            
+            
+            
         }
 
         public int takeDamage(int atk, int mag, character attacker) {

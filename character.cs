@@ -3,10 +3,11 @@ using System;
 namespace text_based_RPG
 {
     class character {
-        int pType, level, hp, mhp, atk, def, mag, spr;
+        int pType, level, hp, mhp, atk, def, mag, spr, agility;
         float exp;
         equipment[] equip = new equipment[6];
 
+        int[] pos = {0,0};
         public character(int _pType, int _level, float _exp, equipment head, equipment rHand, equipment lHand, equipment chest, equipment boots, equipment accessory) {
             pType = _pType;
             level = _level;
@@ -21,9 +22,76 @@ namespace text_based_RPG
             hp = mhp;
         }
 
-        public void doTurn(room curRoom) {
-            attackPhase(curRoom.GetEnemies());
+        public int[] getPos() {
+            return pos;
         }
+
+        public void doTurn(room[,] floor) {
+            room curRoom = floor[pos[0], pos[1]];
+            if (curRoom.cleared()) {
+                movePlayer(floor);
+            } else {
+                attackPhase(curRoom.GetEnemies());
+            }
+        }
+
+        void movePlayer(room[,] floor) {
+            string resp = "";
+            room curRoom = floor[pos[0], pos[1]];
+            Console.Clear();
+            printStats();
+            Console.WriteLine(
+                "+-----"+ (curRoom.getExits()[0] ? "   " : "---") +"-----+\n" +
+                "|             |\n" +
+                "|      N      |\n" +
+                (curRoom.getExits()[3] ? " " : "|")+"    W   E    " + (curRoom.getExits()[1] ? " \n" : "|\n") +
+                "|      S      |\n" +
+                "|             |\n"+
+                "+-----"+ (curRoom.getExits()[2] ? "   " : "---") +"-----+"
+            );
+            
+            Console.WriteLine("Choose a direction(n, e, s, w)");
+            resp = Console.ReadLine().ToUpper();
+            switch (resp) {
+                case "N":
+                    if(curRoom.getExits()[0]) {
+                        pos[0] -= 1;
+                    } else {
+                        Console.WriteLine("You cannot go North");
+                        movePlayer(floor);
+                    }
+                    break;
+                case "E":
+                    if(curRoom.getExits()[1]) {
+                        pos[1] += 1;
+                    } else {
+                        Console.WriteLine("You cannot go East");
+                        movePlayer(floor);
+                    }
+                    break;
+                case "S":
+                    if(curRoom.getExits()[2]) {
+                        pos[0] += 1;
+                    } else {
+                        Console.WriteLine("You cannot go South");
+                        movePlayer(floor);
+                    }
+                    break;
+                case "W": 
+                    if(curRoom.getExits()[3]) {
+                        pos[1] -= 1;
+                    } else {
+                        Console.WriteLine("You cannot go West");
+                        movePlayer(floor);
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Invalid Direction");
+                    movePlayer(floor);
+                    break;
+            }
+        }
+
         int selectEnemy(enemy[] enemies) {
             string resp = "";
             int curEnemy;
@@ -37,12 +105,12 @@ namespace text_based_RPG
                 }
                 else { 
                     Console.WriteLine("Invalid Input");
-                    selectEnemy(enemies);
+                    return selectEnemy(enemies);
                 }
             }
             if (curEnemy - 1 >= enemies.Length || curEnemy <= 0 || enemies[curEnemy - 1].isDead()) {
                 Console.WriteLine("Invalid Input");
-                selectEnemy(enemies);
+                return selectEnemy(enemies);
             }
             return curEnemy;
         }
@@ -77,7 +145,9 @@ namespace text_based_RPG
             } else if(moveType == 1) {
                 toAttack.takeDamage(0, mag, this);
             } else if(moveType == 2) {
-               toAttack.takeDamage(atk, mag, this);
+               toAttack.takeDamage((int)Math.Round((double)atk/2), (int)Math.Round((double)mag/2), this);
+            } else if(moveType == 3) {
+                toAttack.takeDamage(agility, 0, this);
             }
         }
 
@@ -179,25 +249,77 @@ namespace text_based_RPG
                 j++;
                 EXP += " ";
             }
-            Console.WriteLine(
-                "+------------------------------------------------+\n"+//50
-                "| Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
-                "|   HP: [" + hpLeft + "]     |\n"+
-                "| HP: "+ hp + "/" + mhp + spaces + " |\n"+
-                "| LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
-                "+------------------------------------------------+\n"
-            );
+            switch (pType) {
+                case 0:
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine(
+                        "   ^    +------------------------------------------------+\n"+//50
+                        "  | |   | Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
+                        "_ | | _ |   HP: [" + hpLeft + "]     |\n"+
+                        " \\|_|/  | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "   |    | LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
+                        "   o    +------------------------------------------------+\n"
+                    );
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    break;
+                case 1:
+                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    Console.WriteLine(
+                        " /\\__/\\__/\\ +------------------------------------------------+\n"+//50
+                        " |        | | Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
+                        " |        | |   HP: [" + hpLeft + "]     |\n"+
+                        " \\        / | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "  \\      /  | LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
+                        "   \\____/   +------------------------------------------------+\n"
+                    );
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    break;
+                case 2:
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine(
+                        "  //\\\\  +------------------------------------------------+\n"+//50
+                        "  \\\\//  | Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
+                        "   ||   |   HP: [" + hpLeft + "]     |\n"+
+                        "   ||   | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "   ||   | LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
+                        "   ||   +------------------------------------------------+\n"
+                    );
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    break;
+                case 3:
+                    Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(
+                        "    __    +------------------------------------------------+\n"+//50
+                        "   |/\\|   | Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
+                        "   \\\\//   |   HP: [" + hpLeft + "]     |\n"+
+                        " |==  ==| | HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "    ||    | LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
+                        "    ||    +------------------------------------------------+\n"
+                    );
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    break;
+                default:
+                    Console.WriteLine(
+                        "+------------------------------------------------+\n"+//50
+                        "| Player | ATK: " + atk + " DEF: " + def + " MAG: " + mag + " SPR: " + spr + statsLine + " |\n"+
+                        "|   HP: [" + hpLeft + "]     |\n"+
+                        "| HP: "+ hp + "/" + mhp + spaces + " |\n"+
+                        "| LVL: " + LVL + "  EXP: [" + EXP + "]     |\n" +  
+                        "+------------------------------------------------+\n"
+                    );
+                    break;
+            }
         }
 
         void calcAndSetStats() {
             bool bonus = (pType == equip[0].getType() && pType == equip[1].getType() && pType == equip[2].getType() && pType == equip[3].getType() && pType == equip[4].getType() && pType == equip[5].getType());
             
             int mhp = 10 + (level * 3);
-            int atk = equip[0].getAtk() + equip[1].getAtk() + equip[2].getAtk() + equip[3].getAtk() + equip[4].getAtk() + equip[5].getAtk() + (level * 3) + 1;
-            int def = equip[0].getDef() + equip[1].getDef() + equip[2].getDef() + equip[3].getDef() + equip[4].getDef() + equip[5].getDef() + (level * 3) + 1;
-            int mag = equip[0].getMag() + equip[1].getMag() + equip[2].getMag() + equip[3].getMag() + equip[4].getMag() + equip[5].getMag() + (level * 3) + 1;
-            int spr = equip[0].getSpr() + equip[1].getSpr() + equip[2].getSpr() + equip[3].getSpr() + equip[4].getSpr() + equip[5].getSpr() + (level * 3) + 1;
-            Random rand = new Random();
+            int atk = (pType == 0 ? 3 : 0) + equip[0].getAtk() + equip[1].getAtk() + equip[2].getAtk() + equip[3].getAtk() + equip[4].getAtk() + equip[5].getAtk() + (level * 3) + 1;
+            int def = (pType == 1 ? 3 : 0) + equip[0].getDef() + equip[1].getDef() + equip[2].getDef() + equip[3].getDef() + equip[4].getDef() + equip[5].getDef() + (level * 3) + 1;
+            int mag = (pType == 2 ? 3 : 0) + equip[0].getMag() + equip[1].getMag() + equip[2].getMag() + equip[3].getMag() + equip[4].getMag() + equip[5].getMag() + (level * 3) + 1;
+            int spr = (pType == 3 ? 3 : 0) + equip[0].getSpr() + equip[1].getSpr() + equip[2].getSpr() + equip[3].getSpr() + equip[4].getSpr() + equip[5].getSpr() + (level * 3) + 1;
+            int agl = equip[0].getAgl() + equip[1].getAgl() + equip[2].getAgl() + equip[3].getAgl() + equip[4].getAgl() + equip[5].getAgl() + (level * 3) + 1;
             if (bonus)
             {
                 switch (pType) {
@@ -218,10 +340,7 @@ namespace text_based_RPG
                         def += 1;
                         break;
                     default:
-                        atk += rand.Next(-1, 2);
-                        def += rand.Next(-1, 2);
-                        mag += rand.Next(-1, 2);
-                        spr += rand.Next(-1, 2);
+
                         break;
                 }
             }
@@ -231,6 +350,7 @@ namespace text_based_RPG
             this.def = def;
             this.mag = mag;
             this.spr = spr;
+            this.agility = agl;
         }
     }
 }

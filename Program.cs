@@ -14,31 +14,26 @@ namespace text_based_RPG
             Random rand = new Random();
 
             room[,] level = {
-                {new room(new int[]{0,1,1,0}, new enemy[] {enemy.random(), enemy.random(), enemy.random()}), room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
-                {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
-                {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
-                {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY},
-                {room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY, room.EMPTY}
+                {new room(room.d, enemy.randGroup(3)), new room(room.d, new enemy[] {new enemy(5, 50, 20, 7, 20, 7, 10)}), new room(room.d, enemy.randGroup(4))},
+                {new room(room.v, enemy.randGroup(2)), new room(room.ur, enemy.randGroup(1)), new room(room.tr, enemy.randGroup(1))},
+                {new room(room.ur, enemy.randGroup(0)), new room(room.h, enemy.randGroup(2)), new room(room.ul, enemy.randGroup(1))}
             };
-            
-            room curRoom = level[0,0];
 
-            enemy[] enemies = curRoom.GetEnemies();
+            equipment h = new equipment(0, type.ATK, 3, 2, 0, 0, 0);
+            equipment r = new equipment(0, type.ATK, 5, 0, 0, 0, 0);
+            equipment l = new equipment(0, type.ATK, 3, 3, 0, 1, 0);
+            equipment c = new equipment(0, type.ATK, 2, 3, 0, 1, 0);
+            equipment b = new equipment(0, type.ATK, 2, 0, 1, 1, 2);
+            equipment a = new equipment(2, type.ATK, 5, 5, 5, 5, 1);
 
-            equipment h = new equipment(0, type.ATK, 5, 0, 0, 0);
-            equipment r = new equipment(0, type.ATK, 5, 0, 0, 0);
-            equipment l = new equipment(0, type.ATK, 5, 0, 0, 0);
-            equipment c = new equipment(0, type.ATK, 5, 0, 0, 0);
-            equipment b = new equipment(0, type.ATK, 5, 0, 1, 0);
-            equipment a = new equipment(2, type.ATK, 5, 0, 0, 0);
+            character player = new character(type.ATK, 0, 0, h, r, l, c, b, a);
 
-            character player = new character(type.ATK,0, 0, h, r, l, c, b, a);
-            
-            gameLoop(curRoom, player);
+            gameLoop(level, player);
         }
-        static void gameLoop(room curRoom, character player) {
+        static void gameLoop(room[,] floor, character player) {
+            room curRoom = floor[player.getPos()[0],player.getPos()[1]];
             curRoom.loadRoom(player);
-            player.doTurn(curRoom);
+            player.doTurn(floor);
             enemy.doTurn(curRoom, player);
 
 
@@ -48,7 +43,7 @@ namespace text_based_RPG
                 Console.WriteLine("\n\nPress Enter to start next turn.");
                 Console.ReadKey(true);
                 Console.Clear();
-                gameLoop(curRoom, player);
+                gameLoop(floor, player);
             }
         }
         static void gameEnd()
